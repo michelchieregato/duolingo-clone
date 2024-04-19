@@ -1,6 +1,7 @@
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { SidebarItem } from '@/app/(main)/learn/components/sidebar-item';
 
 type Props = {
     className?: string;
@@ -8,27 +9,26 @@ type Props = {
 
 export const Sidebar = ({ className }: Props) => {
     const buttons = [
-        { imgSrc: '/learn.svg', name: 'Aprender' },
-        { imgSrc: '/learn.svg', name: 'Aprender' },
-        { imgSrc: '/learn.svg', name: 'Aprender' },
-        { imgSrc: '/learn.svg', name: 'Aprender' },
+        { imgSrc: '/learn.svg', name: 'Aprender', href: '/learn' },
+        { imgSrc: '/leaderboard.svg', name: 'Placar', href: '/leaderboard' },
+        { imgSrc: '/quests.svg', name: 'Missões', href: '/quests' },
+        { imgSrc: '/shop.svg', name: 'Lojinha', href: '/shop' },
     ];
 
-    const buttonsDivs = buttons.map(({ imgSrc, name }) => {
+    const buttonsDivs = buttons.map(({ imgSrc, name, href }) => {
         return (
-            <Button key={name} variant="sidebarOutline" className="flex gap-4">
-                <Image src={imgSrc} alt={name} width={32} height={32}></Image>
-                {name}
-            </Button>
+            <SidebarItem key={name} imgSrc={imgSrc} name={name} href={href}></SidebarItem>
         )
     });
 
     return (
-        <div className={cn("lg:w-[256px] h-full p-8 flex flex-col lg:fixed left-0 top-0 border-r-2", className)}>
+        <div className={cn("lg:w-[256px] h-full p-4 flex flex-col lg:fixed left-0 top-0 border-r-2", className)}>
             <div className="pb-[30px]">
-                <Image src="duo2.svg" alt="Duoling" width={128} height={40}></Image>
+                <Link href="/learn">
+                    <Image src="duo2.svg" alt="Duoling" width={128} height={40} className="pt-2 pl-2"></Image>
+                </Link>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 flex-1">
                 { buttonsDivs }
             </div>
         </div>
