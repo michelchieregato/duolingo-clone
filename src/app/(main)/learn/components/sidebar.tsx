@@ -2,6 +2,8 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { SidebarItem } from '@/app/(main)/learn/components/sidebar-item';
+import { ClerkLoaded, ClerkLoading, UserButton } from '@clerk/nextjs';
+import { Loader } from 'lucide-react';
 
 type Props = {
     className?: string;
@@ -30,6 +32,14 @@ export const Sidebar = ({ className }: Props) => {
             </div>
             <div className="flex flex-col gap-4 flex-1">
                 { buttonsDivs }
+            </div>
+            <div className="p-4">
+            <ClerkLoading>
+                <Loader className="h-5 w-5 text-muted-foreground animate-spin"></Loader>
+            </ClerkLoading>
+            <ClerkLoaded>
+                <UserButton afterSignOutUrl="/"></UserButton>
+            </ClerkLoaded>
             </div>
         </div>
     )
