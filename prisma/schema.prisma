@@ -14,4 +14,17 @@ model Courses {
   id     Int    @id @default(autoincrement())
   title  String
   imgSrc String
+
+  userProgress UserProgress[]
+}
+
+model UserProgress {
+  id             String  @id
+  userName       String
+  userImgSrc     String?
+  activeCourseId Int?
+  hearts         Int     @default(5)
+  points         Int     @default(5)
+
+  activeCourse Courses? @relation(fields: [activeCourseId], references: [id], onDelete: Cascade)
 }
