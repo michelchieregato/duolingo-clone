@@ -16,6 +16,7 @@ model Courses {
   imgSrc String
 
   userProgress UserProgress[]
+  units        Unit[]
 }
 
 model UserProgress {
@@ -27,4 +28,60 @@ model UserProgress {
   points         Int     @default(5)
 
   activeCourse Courses? @relation(fields: [activeCourseId], references: [id], onDelete: Cascade)
+}
+
+model Unit {
+  id          Int    @id
+  title       String
+  description String
+  courseId    Int
+  order       Int
+
+  course Courses @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  lessons Lesson[]
+}
+
+model Lesson {
+  id     Int    @id
+  title  String
+  unitId Int
+  order  Int
+
+  unit Unit @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  challenges Challenge[]
+}
+
+model Challenge {
+  id       Int    @id
+  lessonId Int
+  type     String
+  question String
+  order    Int
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  options  ChallengeOptions[]
+  progress ChallengeProgress[]
+}
+
+model ChallengeOptions {
+  id          Int     @id
+  challengeId Int
+  text        String
+  correct     Boolean @default(false)
+  imgSrc      String?
+  audioSrc    String?
+
+  challenge Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+}
+
+model ChallengeProgress {
+  id          Int     @id
+  userId      String
+  challengeId Int
+  completed   Boolean @default(false)
+
+  challenge Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
 }
