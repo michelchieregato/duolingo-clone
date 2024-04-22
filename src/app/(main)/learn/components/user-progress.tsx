@@ -2,13 +2,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { InfinityIcon } from 'lucide-react';
-import { db } from '@/db';
+import { Courses } from '@prisma/client';
 
 type Props = {
-    activeCourse: {
-        title: string,
-        imgSrc: string,
-    },
+    activeCourse: Courses,
     hearts: number,
     points: number,
     hasActiveSubscription: boolean,
