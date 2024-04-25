@@ -20,6 +20,9 @@ export const listUnits = cache(async (courseId: number) => {
             lessons: {
                 include: {
                     challenges: {
+                        orderBy: {
+                            order: 'asc',
+                        },
                         include: {
                             progress: {
                                 where: {

@@ -62,7 +62,7 @@ export const LessonButton = (
         },
     };
 
-    const button = <Button size="rounded" variant={locked ? 'ghost' : 'secondary'}
+    const button = <Button size="rounded" variant={locked ? 'locked' : 'secondary'}
                 className="h-[70px] w-[70px] border-b-8">
             <Icon className={cn(
                 'h-10 w-10', locked ? 'fill-neutral-400 text-neutral-400 stroke-neutral-400' : 'fill-primary-foreground text-primary-foreground',

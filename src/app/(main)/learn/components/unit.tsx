@@ -5,7 +5,7 @@ import { LessonButton } from '@/app/(main)/learn/components/lesson-button';
 
 type Props = {
     unit: UnitModel,
-    activeLesson?: LessonModel,
+    activeLesson: LessonModel | null,
 }
 
 export const Unit = ({ unit, activeLesson }: Props) => {
@@ -15,7 +15,7 @@ export const Unit = ({ unit, activeLesson }: Props) => {
 
         return (<LessonButton
             key={lesson.id} lessonId={lesson.id} index={index} totalCount={unit.lessons.length-1}
-            current={lesson.id === 1} locked={isLocked} percentage={activeLesson?.percentage}
+            current={isCurrent} locked={isLocked} percentage={activeLesson?.percentage}
         ></LessonButton>)
     });
     return (

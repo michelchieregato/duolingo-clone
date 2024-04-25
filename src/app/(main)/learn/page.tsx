@@ -6,6 +6,7 @@ import { getUserProgress } from '@/db/queries/user';
 import { redirect } from 'next/navigation';
 import { listUnits } from '@/db/queries/units';
 import { Unit } from '@/app/(main)/learn/components/unit';
+import { getActiveLesson } from '@/db/queries/courses';
 
 const LearnPage = async () => {
     const userProgressData = await getUserProgress();
@@ -13,10 +14,12 @@ const LearnPage = async () => {
     if (!userProgressData?.activeCourse) {
         redirect('/courses');
     }
+
     const units = await listUnits(userProgressData.activeCourse.id);
+    const activeLesson = await getActiveLesson();
 
     const unitsDivs = units.map((unit) => {
-        return (<Unit key={unit.id} unit={unit}></Unit>)
+        return (<Unit key={unit.id} unit={unit} activeLesson={activeLesson}></Unit>)
     });
 
     return (
