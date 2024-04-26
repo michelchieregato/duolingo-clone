@@ -18,7 +18,5 @@ export const getUserProgress = cache(async () => {
         }
     });
 
-    console.log(data);
-
     return data;
 });

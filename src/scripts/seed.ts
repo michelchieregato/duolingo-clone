@@ -42,10 +42,10 @@ export const seedDb = async () => {
         data: [
             { id: 1, challengeId: 1, imgSrc: '/man.svg', text: 'el hombre', correct: true, audioSrc: '/es_man.mp3'},
             { id: 2, challengeId: 1, imgSrc: '/woman.svg', text: 'la mujer', correct: false, audioSrc: '/es_woman.mp3'},
-            { id: 3, challengeId: 1, imgSrc: '/robot.svg', text: 'el robot', correct: false, audioSrc: '/es_robot.mp3'},
-            { id: 4, challengeId: 2, imgSrc: '/man.svg', text: 'el hombre', correct: false, audioSrc: '/es_man.mp3'},
+            { id: 3, challengeId: 1, imgSrc: '/frog.svg', text: 'el robot', correct: false, audioSrc: '/es_frog.mp3'},
+            { id: 4, challengeId: 2, imgSrc: '/man.svg', text: 'la rana', correct: false, audioSrc: '/es_man.mp3'},
             { id: 5, challengeId: 2, imgSrc: '/woman.svg', text: 'la mujer', correct: true, audioSrc: '/es_woman.mp3'},
-            { id: 6, challengeId: 2, imgSrc: '/robot.svg', text: 'el robot', correct: false, audioSrc: '/es_robot.mp3'},
+            { id: 6, challengeId: 2, imgSrc: '/frog.svg', text: 'la rana', correct: false, audioSrc: '/es_frog.mp3'},
         ],
     });
 }

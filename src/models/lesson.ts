@@ -27,6 +27,12 @@ export class ChallengeModel implements Challenge {
         return this.progress.every(challengeProgress => challengeProgress.completed);
     }
 
+    toJson() {
+        return {
+            ...this,
+        }
+    }
+
 }
 
 export class LessonModel implements Lesson {
@@ -61,5 +67,12 @@ export class LessonModel implements Lesson {
         const allChallenges = this.challenges?.length || 0;
 
         return Math.round(completedChallenges / allChallenges * 100);
+    }
+
+    toJson() {
+        return {
+            ...this,
+            challenges: this.challenges?.map((challenge) => challenge.toJson()),
+        }
     }
 }

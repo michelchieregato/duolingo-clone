@@ -45,6 +45,7 @@ export const getActiveLesson = cache(async () => {
                                     userId: userId,
                                 },
                             },
+                            options: true,
                         },
                     },
                 },
