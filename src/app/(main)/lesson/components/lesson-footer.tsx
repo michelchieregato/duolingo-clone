@@ -50,6 +50,7 @@ export const LessonFooter = ({ disabled, status, onCheck, lessonId }: Props) => 
                     variant={status === 'wrong' ? 'danger' : 'secondary'}
                 >
                     {status === '' && 'Verificar'}
+                    {status === 'correct' && 'Continuar'}
                     {status === 'wrong' && 'Tentar de novo'}
                     {status === 'completed' && 'Continuar'}
                 </Button>

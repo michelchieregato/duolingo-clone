@@ -2,12 +2,13 @@
 
 import { ChallengeOptions, Courses, UserProgress } from '@prisma/client';
 import { LessonModel } from '@/models/lesson';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import LessonHeader from '@/app/(main)/lesson/components/lesson-header';
 import { QuestionBubble } from '@/app/(main)/lesson/components/lesson-bubble';
 import { Challenge } from '@/app/(main)/lesson/components/challenge';
 import { LessonFooter } from '@/app/(main)/lesson/components/lesson-footer';
-import { updateChallengeProgress } from '@/db/queries/challenges';
+import { upsertChallengeProgress } from '@/db/queries/challenges';
+import { auth } from '@clerk/nextjs';
 
 type Props = {
     rawLesson: any,
@@ -15,14 +16,17 @@ type Props = {
         activeCourse: Courses | null,
     },
     userSubscription: any,
+    userId: string,
 }
 
-export const Quiz = ({ rawLesson, userProgress, userSubscription }: Props) => {
+export const Quiz = ({ rawLesson, userProgress, userSubscription, userId }: Props) => {
     const lesson = new LessonModel(rawLesson);
+    const [isPending, startTransition] = useTransition();
+
     const initialPercentage = lesson?.percentage;
 
     const [hearts, setHearts] = useState(userProgress.hearts);
-    const [percentage, serPercentage] = useState(initialPercentage);
+    const [percentage, setPercentage] = useState(initialPercentage);
     const [challenges] = useState(lesson.challenges || []);
     const [activeIndex, setActiveIndex] = useState(() => {
         const uncompleted = challenges?.findIndex((challenge) => {
@@ -32,11 +36,13 @@ export const Quiz = ({ rawLesson, userProgress, userSubscription }: Props) => {
     });
 
     const challenge = challenges[activeIndex];
+
     const title = challenge.type === 'ASSIST' ? 'Selecione o significado correto:' : challenge.question;
 
     const [status, setStatus ] = useState<'wrong' | 'correct' | 'completed' | ''>('')
     const [selectedOption, setSelectedOption] = useState<ChallengeOptions | undefined>(undefined);
     const [disabled, setDisabled] = useState(false);
+
     const handleSelect = (option: ChallengeOptions) => {
         if (status !== '') {
             return;
@@ -44,13 +50,33 @@ export const Quiz = ({ rawLesson, userProgress, userSubscription }: Props) => {
         setSelectedOption(option);
     }
 
-    const handleCheck = () => {
-        if (selectedOption) {
-            if (selectedOption.correct) {
-                setStatus(selectedOption.correct ? 'correct' : 'wrong');
-            }
+    const onNext = () => {
+        setActiveIndex(activeIndex + 1);
+    }
 
-            setDisabled(true);
+    const handleCheck = () => {
+        if (!selectedOption) {
+            return;
+        }
+
+        if (status === 'correct') {
+            startTransition(() => {
+                upsertChallengeProgress(challenge.id).then((response) => {
+                    if (response?.error) {
+                        console.error('Error');
+                        return;
+                    }
+                    onNext();
+                    setStatus('');
+                    setPercentage((previousPercentage) => previousPercentage + 100 / challenges.length);
+
+                });
+            });
+        } else if (status === 'wrong') {
+            setStatus('');
+            setSelectedOption(undefined);
+        } else if (status === '') {
+            setStatus(selectedOption.correct ? 'correct' : 'wrong');
         }
     }
 
