@@ -66,7 +66,7 @@ export const upsertChallengeProgress = async (challengeId: number) => {
     }
 }
 
-export const updateUserProgress = async (id: string, fieldsToUpdate: Pick<UserProgress, 'hearts' | 'points'>) => {
+export const updateUserProgress = async (id: string, fieldsToUpdate: { hearts?: number, points?: number }) => {
     return db.userProgress.update({
         where: {
             id,

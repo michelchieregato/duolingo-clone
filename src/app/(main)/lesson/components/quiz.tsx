@@ -7,7 +7,7 @@ import LessonHeader from '@/app/(main)/lesson/components/lesson-header';
 import { QuestionBubble } from '@/app/(main)/lesson/components/lesson-bubble';
 import { Challenge } from '@/app/(main)/lesson/components/challenge';
 import { LessonFooter } from '@/app/(main)/lesson/components/lesson-footer';
-import { upsertChallengeProgress } from '@/db/queries/challenges';
+import { updateUserProgress, upsertChallengeProgress } from '@/db/queries/challenges';
 import { auth } from '@clerk/nextjs';
 
 type Props = {
@@ -77,6 +77,15 @@ export const Quiz = ({ rawLesson, userProgress, userSubscription, userId }: Prop
             setSelectedOption(undefined);
         } else if (status === '') {
             setStatus(selectedOption.correct ? 'correct' : 'wrong');
+            if (!selectedOption.correct) {
+                startTransition(() => {
+                    updateUserProgress(userId, {
+                        hearts: Math.max(hearts - 1, 0),
+                    }).then(() => {
+                        setHearts((prevHearts) => Math.max(prevHearts - 1, 0));
+                    });
+                });
+            }
         }
     }
 
