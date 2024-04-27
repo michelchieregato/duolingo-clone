@@ -5,14 +5,13 @@ import { Card } from '@/app/(main)/lesson/components/card';
 
 type Props = {
     challenge: ChallengeModel,
-    onSelect: (id: number) => void,
-    status: "correct" | "wrong",
-    selectedOption?: number,
+    onSelect: (option: ChallengeOptions) => void,
+    status: "correct" | "wrong" | "completed" | "",
+    selectedOption?: ChallengeOptions,
     disabled?: boolean,
 }
 
 export const Challenge = ({ challenge, onSelect, status, selectedOption, disabled }: Props) => {
-    console.log(challenge.options);
     return (
         <div className={cn(
             'grid gap-2',
@@ -24,8 +23,8 @@ export const Challenge = ({ challenge, onSelect, status, selectedOption, disable
                     key={option.id}
                     option={option}
                     shortcut={index + 1}
-                    selected={selectedOption === option.id}
-                    onClick={() => onSelect(option.id)}
+                    selected={selectedOption?.id === option.id}
+                    onClick={() => onSelect(option)}
                     type={challenge.type}
                     disabled={disabled}
                     status={status}

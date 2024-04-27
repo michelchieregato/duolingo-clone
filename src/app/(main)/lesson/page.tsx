@@ -12,7 +12,6 @@ const LessonPage = async () => {
     if (!lesson || !userProgress) {
         redirect('/courses');
     }
-    console.log((lesson.challenges || [])[0]);
 
     return (
         <Quiz rawLesson={lesson.toJson()} userProgress={userProgress} userSubscription={null}></Quiz>

@@ -23,8 +23,6 @@ export const upsertUserProgress = async (courseId: number) => {
         throw new Error('Course not found.');
     }
 
-    console.log('Aqui!!');
-
     const response = await db.userProgress.upsert({
         where: {
             id: userId,
@@ -39,8 +37,6 @@ export const upsertUserProgress = async (courseId: number) => {
             activeCourseId: courseId,
         },
     });
-
-    console.log(response);
 
     revalidatePath('/lessons');
     revalidatePath('/courses');

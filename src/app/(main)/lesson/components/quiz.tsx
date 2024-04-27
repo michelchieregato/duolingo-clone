@@ -1,11 +1,13 @@
 'use client';
 
-import { Courses, UserProgress } from '@prisma/client';
+import { ChallengeOptions, Courses, UserProgress } from '@prisma/client';
 import { LessonModel } from '@/models/lesson';
 import { useState } from 'react';
 import LessonHeader from '@/app/(main)/lesson/components/lesson-header';
 import { QuestionBubble } from '@/app/(main)/lesson/components/lesson-bubble';
 import { Challenge } from '@/app/(main)/lesson/components/challenge';
+import { LessonFooter } from '@/app/(main)/lesson/components/lesson-footer';
+import { updateChallengeProgress } from '@/db/queries/challenges';
 
 type Props = {
     rawLesson: any,
@@ -32,6 +34,26 @@ export const Quiz = ({ rawLesson, userProgress, userSubscription }: Props) => {
     const challenge = challenges[activeIndex];
     const title = challenge.type === 'ASSIST' ? 'Selecione o significado correto:' : challenge.question;
 
+    const [status, setStatus ] = useState<'wrong' | 'correct' | 'completed' | ''>('')
+    const [selectedOption, setSelectedOption] = useState<ChallengeOptions | undefined>(undefined);
+    const [disabled, setDisabled] = useState(false);
+    const handleSelect = (option: ChallengeOptions) => {
+        if (status !== '') {
+            return;
+        }
+        setSelectedOption(option);
+    }
+
+    const handleCheck = () => {
+        if (selectedOption) {
+            if (selectedOption.correct) {
+                setStatus(selectedOption.correct ? 'correct' : 'wrong');
+            }
+
+            setDisabled(true);
+        }
+    }
+
     return (
         <>
             <LessonHeader
@@ -49,16 +71,18 @@ export const Quiz = ({ rawLesson, userProgress, userSubscription }: Props) => {
                             { challenge.type === 'ASSIST' && <QuestionBubble question={challenge.question}></QuestionBubble> }
                             <Challenge
                                 challenge={challenge}
-                                onSelect={() => {}}
-                                status={'wrong'}
+                                onSelect={handleSelect}
+                                status={status}
+                                selectedOption={selectedOption}
+                                disabled={disabled}
                             >
 
                             </Challenge>
                         </div>
                     </div>
-
                 </div>
             </div>
+            <LessonFooter status={status} onCheck={handleCheck}></LessonFooter>
         </>
     )
 }
